@@ -9,7 +9,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  image_picker: ^0.8.5+3  # Add this line to include the image_picker package
+  image_picker: ^0.8.7+3  # Updated version
+  share: ^2.0.4           # Use a compatible version
+  file_picker: ^5.2.1     # Added dependency for picking files
+  url_launcher: ^6.1.9    # Added dependency for launching URLs
 
 dev_dependencies:
   flutter_test:
@@ -18,4 +21,3 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-

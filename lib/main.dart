@@ -77,7 +77,7 @@ class MainPage extends StatelessWidget {
             ),
             const Spacer(), // To push the Center widget to the middle of the screen
             const Center(
-              child: Text('Kamala!'),
+              child: Text("Create your new Blog!!"),
             ),
             const Spacer(), // To push the Center widget to the middle of the screen
           ],
@@ -91,7 +91,7 @@ class MainPage extends StatelessWidget {
             MaterialPageRoute(builder: (context) => const NewBlogPage()),
           );
         },
-        backgroundColor: Color.fromARGB(255, 190, 10, 70), // Button color
+        backgroundColor: const Color.fromARGB(255, 190, 10, 70), // Button color
         foregroundColor: Colors.white,
         child: const Icon(Icons.add), // Icon color
       ),
