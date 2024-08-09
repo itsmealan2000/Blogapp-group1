@@ -1,7 +1,4 @@
-//import 'package:blogapp/pages/home_page.dart';
-//  import 'package:blogapp/pages/setting_page.dart';
 import 'package:blogapp/auth/auth_page.dart';
-// import 'package:blogapp/components/splash_page.dart';
 import 'package:blogapp/firebase_options.dart';
 import 'package:blogapp/theme/theme_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
