@@ -1,8 +1,23 @@
-import 'package:blogapp/pages/home_page.dart';
+//import 'package:blogapp/pages/home_page.dart';
+//  import 'package:blogapp/pages/setting_page.dart';
+import 'package:blogapp/auth/auth_page.dart';
+// import 'package:blogapp/components/splash_page.dart';
+import 'package:blogapp/firebase_options.dart';
+import 'package:blogapp/theme/theme_provider.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-void main() {
-  runApp(const MainApp());
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(
+    ChangeNotifierProvider(create: (context) => ThemeProvider(),
+    child: const MainApp(),)
+    );
 }
 
 class MainApp extends StatelessWidget {
@@ -10,10 +25,12 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: "BLOG APP",
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      theme: Provider.of<ThemeProvider>(context).themeData,
+      //home:  const SplashPage()
+      home: const AuthPage(),
     );
   }
 }
