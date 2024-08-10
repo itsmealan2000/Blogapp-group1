@@ -1,12 +1,11 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io'; // For File
 import 'package:share/share.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:url_launcher/url_launcher.dart'; // For Dropbox integration
 
 class NewBlogPage extends StatefulWidget {
   const NewBlogPage({super.key});
@@ -16,7 +15,7 @@ class NewBlogPage extends StatefulWidget {
 }
 
 class _NewBlogPageState extends State<NewBlogPage> {
-  String? _selectedCategory; // Variable to hold the selected category
+  String? _selectedCategory;
   final List<String> _categories = [
     'Food blogs',
     'Travel blogs',
@@ -40,8 +39,8 @@ class _NewBlogPageState extends State<NewBlogPage> {
     'Political blogs',
   ];
 
-  XFile? _image; // Variable to hold the selected image
-  File? _file; // Variable to hold the selected file
+  XFile? _image;
+  File? _file;
 
   Future<void> _pickMedia() async {
     final picker = ImagePicker();
@@ -69,25 +68,10 @@ class _NewBlogPageState extends State<NewBlogPage> {
     Share.share('Check out my new blog!');
   }
 
-  Future<void> _openDropbox() async {
-    const url = 'https://www.dropbox.com'; // Replace with Dropbox file URL
-    // ignore: deprecated_member_use
-    if (await canLaunch(url)) {
-      // ignore: deprecated_member_use
-      await launch(url);
-    } else {
-      if (kDebugMode) {
-        print('Could not open Dropbox link');
-      }
-    }
-  }
-
   void _saveBlog() {
-    // Handle save action here
     if (kDebugMode) {
       print('Blog saved');
     }
-    // You can add more functionality to save the blog data
   }
 
   Future<double> _getAspectRatio(File imageFile) async {
@@ -123,7 +107,7 @@ class _NewBlogPageState extends State<NewBlogPage> {
       ),
       body: Container(
         decoration: BoxDecoration(
-          color: Colors.purple[100], // Light purple background color
+          color: Colors.purple[100],
         ),
         constraints: const BoxConstraints.expand(),
         child: SingleChildScrollView(
@@ -139,7 +123,7 @@ class _NewBlogPageState extends State<NewBlogPage> {
                       builder: (BuildContext context) {
                         return SizedBox(
                           height: 150,
-                          child: Column(
+                          child: ListView(
                             children: [
                               ListTile(
                                 leading: const Icon(Icons.camera),
@@ -164,8 +148,8 @@ class _NewBlogPageState extends State<NewBlogPage> {
                     );
                   },
                   child: Container(
-                    width: double.infinity, // Full width
-                    height: 150, // Fixed height
+                    width: double.infinity,
+                    height: 150,
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey, width: 2.0),
                       borderRadius: BorderRadius.circular(8.0),
@@ -319,7 +303,7 @@ class _NewBlogPageState extends State<NewBlogPage> {
                     builder: (BuildContext context) {
                       return SizedBox(
                         height: 150,
-                        child: Column(
+                        child: ListView(
                           children: [
                             ListTile(
                               leading: const Icon(Icons.camera),
@@ -346,19 +330,61 @@ class _NewBlogPageState extends State<NewBlogPage> {
               ),
               IconButton(
                 icon: const Icon(Icons.attach_file, color: Colors.white),
-                onPressed: _pickFile,
+                onPressed: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return SizedBox(
+                        height: 75,
+                        child: ListView(
+                          children: [
+                            // ListTile(
+                            //   leading: const Icon(Icons.camera),
+                            //   title: const Text('Take Photo'),
+                            //   onTap: () {
+                            //     Navigator.pop(context);
+                            //     _captureMedia(ImageSource.camera);
+                            //   },
+                            // ),
+                            // ListTile(
+                            //   leading: const Icon(Icons.image),
+                            //   title: const Text('Choose from Gallery'),
+                            //   onTap: () {
+                            //     Navigator.pop(context);
+                            //     _pickMedia();
+                            //   },
+                            // ),
+                            ListTile(
+                              leading: const Icon(Icons.file_present),
+                              title: const Text('Pick a File'),
+                              onTap: () {
+                                Navigator.pop(context);
+                                _pickFile();
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                },
               ),
               ElevatedButton(
                 onPressed: _saveBlog,
                 style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.purple[300],
                   backgroundColor: Colors.white,
                   shape: const StadiumBorder(),
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24.0,
+                    vertical: 4.0,
+                  ),
                 ),
                 child: const Text(
                   'Save',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    color: Colors.purple,
+                    fontSize: 18,
+                  ),
                 ),
               ),
             ],
