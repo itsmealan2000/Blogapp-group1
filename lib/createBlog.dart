@@ -39,27 +39,28 @@ class _NewBlogPageState extends State<NewBlogPage> {
     'Political blogs',
   ];
 
-  XFile? _image;
+  XFile? _topImage;
+  File? _bottomImage;
   File? _file;
 
-  Future<void> _pickMedia() async {
+  Future<void> _pickTopImage() async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
       setState(() {
-        _image = pickedFile;
+        _topImage = pickedFile;
       });
     }
   }
 
-  Future<void> _captureMedia(ImageSource source) async {
+  Future<void> _captureBottomImage(ImageSource source) async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: source);
 
     if (pickedFile != null) {
       setState(() {
-        _image = pickedFile;
+        _bottomImage = File(pickedFile.path);
       });
     }
   }
@@ -98,6 +99,18 @@ class _NewBlogPageState extends State<NewBlogPage> {
     }
   }
 
+  void _removeTopImage() {
+    setState(() {
+      _topImage = null;
+    });
+  }
+
+  void _removeBottomImage() {
+    setState(() {
+      _bottomImage = null;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -117,36 +130,7 @@ class _NewBlogPageState extends State<NewBlogPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 GestureDetector(
-                  onTap: () {
-                    showModalBottomSheet(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return SizedBox(
-                          height: 150,
-                          child: ListView(
-                            children: [
-                              ListTile(
-                                leading: const Icon(Icons.camera),
-                                title: const Text('Take Photo'),
-                                onTap: () {
-                                  Navigator.pop(context);
-                                  _captureMedia(ImageSource.camera);
-                                },
-                              ),
-                              ListTile(
-                                leading: const Icon(Icons.image),
-                                title: const Text('Choose from Gallery'),
-                                onTap: () {
-                                  Navigator.pop(context);
-                                  _pickMedia();
-                                },
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    );
-                  },
+                  onTap: _pickTopImage,
                   child: Container(
                     width: double.infinity,
                     height: 150,
@@ -155,7 +139,7 @@ class _NewBlogPageState extends State<NewBlogPage> {
                       borderRadius: BorderRadius.circular(8.0),
                       color: Colors.grey[200],
                     ),
-                    child: _image == null
+                    child: _topImage == null
                         ? Center(
                             child: Icon(
                               Icons.camera_alt,
@@ -163,29 +147,24 @@ class _NewBlogPageState extends State<NewBlogPage> {
                               size: 40,
                             ),
                           )
-                        : FutureBuilder<double>(
-                            future: _getAspectRatio(File(_image!.path)),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const Center(
-                                    child: CircularProgressIndicator());
-                              } else if (snapshot.hasError) {
-                                return const Center(
-                                    child: Text('Error loading image'));
-                              } else {
-                                final aspectRatio = snapshot.data ?? 1;
-                                return Center(
-                                  child: AspectRatio(
-                                    aspectRatio: aspectRatio,
-                                    child: Image.file(
-                                      File(_image!.path),
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                );
-                              }
-                            },
+                        : Stack(
+                            children: [
+                              Center(
+                                child: Image.file(
+                                  File(_topImage!.path),
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                              Positioned(
+                                top: 8,
+                                right: 8,
+                                child: IconButton(
+                                  icon: const Icon(Icons.remove_circle,
+                                      color: Colors.red),
+                                  onPressed: _removeTopImage,
+                                ),
+                              ),
+                            ],
                           ),
                   ),
                 ),
@@ -269,14 +248,41 @@ class _NewBlogPageState extends State<NewBlogPage> {
                     ),
                     color: Colors.white,
                   ),
-                  child: const TextField(
-                    maxLines: null,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'Write your blog content here...',
-                      contentPadding: EdgeInsets.symmetric(
-                          horizontal: 16.0, vertical: 16.0),
-                    ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (_bottomImage != null)
+                        Stack(
+                          children: [
+                            SizedBox(
+                              width: double.infinity,
+                              child: Image.file(
+                                _bottomImage!,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            Positioned(
+                              top: 8,
+                              right: 8,
+                              child: IconButton(
+                                icon: const Icon(Icons.remove_circle,
+                                    color: Colors.red),
+                                onPressed: _removeBottomImage,
+                              ),
+                            ),
+                          ],
+                        ),
+                      // Add content text field or other widgets here
+                      const TextField(
+                        maxLines: null,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'Write your blog content here...',
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 16.0),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -284,111 +290,50 @@ class _NewBlogPageState extends State<NewBlogPage> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomAppBar(
+      bottomNavigationBar: Container(
+        padding: const EdgeInsets.all(10),
         color: Colors.purple[300],
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              IconButton(
-                icon: const Icon(Icons.share, color: Colors.white),
-                onPressed: _shareContent,
-              ),
-              IconButton(
-                icon: const Icon(Icons.camera_alt, color: Colors.white),
-                onPressed: () {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return SizedBox(
-                        height: 150,
-                        child: ListView(
-                          children: [
-                            ListTile(
-                              leading: const Icon(Icons.camera),
-                              title: const Text('Take Photo'),
-                              onTap: () {
-                                Navigator.pop(context);
-                                _captureMedia(ImageSource.camera);
-                              },
-                            ),
-                            ListTile(
-                              leading: const Icon(Icons.image),
-                              title: const Text('Choose from Gallery'),
-                              onTap: () {
-                                Navigator.pop(context);
-                                _pickMedia();
-                              },
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  );
-                },
-              ),
-              IconButton(
-                icon: const Icon(Icons.attach_file, color: Colors.white),
-                onPressed: () {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return SizedBox(
-                        height: 75,
-                        child: ListView(
-                          children: [
-                            // ListTile(
-                            //   leading: const Icon(Icons.camera),
-                            //   title: const Text('Take Photo'),
-                            //   onTap: () {
-                            //     Navigator.pop(context);
-                            //     _captureMedia(ImageSource.camera);
-                            //   },
-                            // ),
-                            // ListTile(
-                            //   leading: const Icon(Icons.image),
-                            //   title: const Text('Choose from Gallery'),
-                            //   onTap: () {
-                            //     Navigator.pop(context);
-                            //     _pickMedia();
-                            //   },
-                            // ),
-                            ListTile(
-                              leading: const Icon(Icons.file_present),
-                              title: const Text('Pick a File'),
-                              onTap: () {
-                                Navigator.pop(context);
-                                _pickFile();
-                              },
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  );
-                },
-              ),
-              ElevatedButton(
-                onPressed: _saveBlog,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  shape: const StadiumBorder(),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24.0,
-                    vertical: 4.0,
-                  ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            IconButton(
+              icon: const Icon(Icons.share),
+              onPressed: _shareContent,
+            ),
+            Row(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.camera_alt),
+                  onPressed: () {
+                    _captureBottomImage(ImageSource.camera);
+                  },
                 ),
-                child: const Text(
-                  'Save',
-                  style: TextStyle(
-                    color: Colors.purple,
-                    fontSize: 18,
-                  ),
+                IconButton(
+                  icon: const Icon(Icons.image),
+                  onPressed: () {
+                    _captureBottomImage(ImageSource.gallery);
+                  },
+                ),
+                IconButton(
+                  icon: const Icon(Icons.attach_file),
+                  onPressed: _pickFile,
+                ),
+              ],
+            ),
+            ElevatedButton(
+              onPressed: _saveBlog,
+              style: ElevatedButton.styleFrom(
+                shape: CircleBorder(),
+                padding: EdgeInsets.all(20),
+              ),
+              child: const Text(
+                'Save',
+                style: TextStyle(
+                  fontSize: 16,
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
