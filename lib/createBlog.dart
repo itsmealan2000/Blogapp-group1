@@ -5,12 +5,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:share/share.dart';
+// ignore: unused_import
 import 'package:file_picker/file_picker.dart';
 
 class NewBlogPage extends StatefulWidget {
   const NewBlogPage({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _NewBlogPageState createState() => _NewBlogPageState();
 }
 
@@ -40,8 +42,11 @@ class _NewBlogPageState extends State<NewBlogPage> {
   ];
 
   XFile? _topImage;
-  File? _bottomImage;
+  final List<File> _bottomImages = [];
+  // ignore: unused_field
   File? _file;
+
+  get _pickFile => null;
 
   Future<void> _pickTopImage() async {
     final picker = ImagePicker();
@@ -60,7 +65,7 @@ class _NewBlogPageState extends State<NewBlogPage> {
 
     if (pickedFile != null) {
       setState(() {
-        _bottomImage = File(pickedFile.path);
+        _bottomImages.add(File(pickedFile.path));
       });
     }
   }
@@ -75,39 +80,15 @@ class _NewBlogPageState extends State<NewBlogPage> {
     }
   }
 
-  Future<double> _getAspectRatio(File imageFile) async {
-    final completer = Completer<double>();
-    final image = Image.file(imageFile);
-    image.image.resolve(const ImageConfiguration()).addListener(
-      ImageStreamListener(
-        (ImageInfo imageInfo, bool synchronousCall) {
-          final width = imageInfo.image.width.toDouble();
-          final height = imageInfo.image.height.toDouble();
-          completer.complete(width / height);
-        },
-      ),
-    );
-    return completer.future;
-  }
-
-  Future<void> _pickFile() async {
-    final result = await FilePicker.platform.pickFiles();
-    if (result != null && result.files.isNotEmpty) {
-      setState(() {
-        _file = File(result.files.single.path!);
-      });
-    }
+  void _removeBottomImage(int index) {
+    setState(() {
+      _bottomImages.removeAt(index);
+    });
   }
 
   void _removeTopImage() {
     setState(() {
       _topImage = null;
-    });
-  }
-
-  void _removeBottomImage() {
-    setState(() {
-      _bottomImage = null;
     });
   }
 
@@ -251,13 +232,13 @@ class _NewBlogPageState extends State<NewBlogPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (_bottomImage != null)
+                      for (int i = 0; i < _bottomImages.length; i++)
                         Stack(
                           children: [
                             SizedBox(
                               width: double.infinity,
                               child: Image.file(
-                                _bottomImage!,
+                                _bottomImages[i],
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -267,7 +248,7 @@ class _NewBlogPageState extends State<NewBlogPage> {
                               child: IconButton(
                                 icon: const Icon(Icons.remove_circle,
                                     color: Colors.red),
-                                onPressed: _removeBottomImage,
+                                onPressed: () => _removeBottomImage(i),
                               ),
                             ),
                           ],
@@ -314,6 +295,7 @@ class _NewBlogPageState extends State<NewBlogPage> {
                     _captureBottomImage(ImageSource.gallery);
                   },
                 ),
+                // ignore: prefer_const_constructors
                 IconButton(
                   icon: const Icon(Icons.attach_file),
                   onPressed: _pickFile,
@@ -323,8 +305,8 @@ class _NewBlogPageState extends State<NewBlogPage> {
             ElevatedButton(
               onPressed: _saveBlog,
               style: ElevatedButton.styleFrom(
-                shape: CircleBorder(),
-                padding: EdgeInsets.all(20),
+                shape: const CircleBorder(),
+                padding: const EdgeInsets.all(20),
               ),
               child: const Text(
                 'Save',
