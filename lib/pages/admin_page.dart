@@ -1,15 +1,26 @@
+import 'package:blogapp/components/adminpage/manageblogs.dart';
+import 'package:blogapp/components/adminpage/managecontent.dart';
+import 'package:blogapp/components/adminpage/manageusers.dart';
 import 'package:flutter/material.dart';
 
-class AdminPage extends StatelessWidget {
-  const AdminPage({Key? key}) : super(key: key);
 
+class AdminPage extends StatelessWidget {
+  const AdminPage({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
         leading: const Icon(Icons.admin_panel_settings), //icon
-        title: const Text("Admin Page"), //title
-        toolbarHeight: 80,
+        title: Text(
+          "Admin Page",
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.inversePrimary,
+            fontSize: 40,
+            fontWeight: FontWeight.bold,
+          ),
+        ), //title
+        toolbarHeight: 100,
         centerTitle: true,
         backgroundColor: Colors.blue, //background color
         actions: const [
@@ -20,14 +31,96 @@ class AdminPage extends StatelessWidget {
           ),
         ],
         iconTheme: const IconThemeData(size: 40), // icon size
-        titleTextStyle: const TextStyle( // text style
+        titleTextStyle: const TextStyle(
+          // text style
           fontSize: 40,
           fontWeight: FontWeight.bold,
           color: Colors.white,
         ),
       ),
-      body: const Center(
-        child: Text("Admin Page"),
+      body: SafeArea(
+        child: Column(
+          children: [
+            const Padding(
+              padding: EdgeInsets.all(30),
+              child: Text(
+                "Welcome Admin",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 40,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+//listitems
+            ListTile(//manage users
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              title: const Text(
+                "Manage Users",
+                style: TextStyle(
+                  fontSize: 40,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              leading: const Icon(
+                Icons.person_pin_circle,
+                size: 40,
+                ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Manageusers()),
+                );
+              },
+            ),
+            ListTile(//manageblogs
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              title: const Text(
+                "Manage Blogs",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 40,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              leading: const Icon(
+                Icons.article,
+                size: 40,
+                ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Manageblogs()),
+                );
+              },
+            ),
+            ListTile(//manage Contents
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              title: const Text(
+                "Manage Content",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 40,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              leading: const Icon(
+                Icons.content_paste,
+                size: 40,
+                ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const Managecontent()),
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
