@@ -1,8 +1,7 @@
-import 'package:blogapp/components/adminpage/manageblogs.dart';
-import 'package:blogapp/components/adminpage/managecontent.dart';
-import 'package:blogapp/components/adminpage/manageusers.dart';
+import 'package:blogapp/admin/admin-Pages/manageblogs.dart';
+import 'package:blogapp/admin/admin-Pages/managecontent.dart';
+import 'package:blogapp/admin/admin-Pages/manageusers.dart';
 import 'package:flutter/material.dart';
-
 
 class AdminPage extends StatelessWidget {
   const AdminPage({super.key});
@@ -70,7 +69,7 @@ class AdminPage extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const Manageusers()),
+                  MaterialPageRoute(builder: (context) =>  Manageusers()),
                 );
               },
             ),
