@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-class api {
+class Apiservice {
   final String baseUrl;
 
-  api(this.baseUrl);
+  Apiservice(this.baseUrl);
 
   Future<List<Map<String, dynamic>>> fetchUsers() async {
     try {

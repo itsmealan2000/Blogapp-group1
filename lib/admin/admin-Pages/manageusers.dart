@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:blogapp/admin/admin-components/api.dart';
+import 'package:flutter/material.dart';
+import 'package:blogapp/admin/admin-components/users.dart';
 
 class Manageusers extends StatefulWidget {
   const Manageusers({super.key});
@@ -10,7 +11,7 @@ class Manageusers extends StatefulWidget {
 
 class _ManageusersState extends State<Manageusers> {
   late Future<List<Map<String, dynamic>>> _userFuture;
-  final api _api = api('https://jsonplaceholder.typicode.com/users');
+  final Apiservice _apiservice = Apiservice('https://jsonplaceholder.typicode.com/users');
   final TextEditingController _searchController = TextEditingController();
   List<Map<String, dynamic>> _filteredUsers = [];
   List<Map<String, dynamic>> _allUsers = [];
@@ -18,7 +19,7 @@ class _ManageusersState extends State<Manageusers> {
   @override
   void initState() {
     super.initState();
-    _userFuture = _api.fetchUsers().then((users) {
+    _userFuture = _apiservice.fetchUsers().then((users) {
       setState(() {
         _allUsers = users;
         _filteredUsers = users;
@@ -98,6 +99,15 @@ class _ManageusersState extends State<Manageusers> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
+                        onTap: (){
+                          //naviage to users page
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => UserDetail(user: user),
+                            ),
+                          );
+                        },
                         subtitle: Text( //email
                           'Email: ${user['email'] ?? 'Unknown Email'}',
                           style: const TextStyle(fontSize: 20),
