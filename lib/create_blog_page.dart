@@ -62,7 +62,11 @@ class _CreateBlogPageState extends State<CreateBlogPage> {
               controller: _titleController,
               decoration: const InputDecoration(
                 hintText: 'Title',
-                border: OutlineInputBorder(),
+                border: InputBorder.none,
+              ),
+              style: const TextStyle(
+                fontSize: 24.0, // Increase the font size here
+                fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: 20.0),
@@ -70,7 +74,7 @@ class _CreateBlogPageState extends State<CreateBlogPage> {
               controller: _contentController,
               decoration: const InputDecoration(
                 hintText: 'Content',
-                border: OutlineInputBorder(),
+                border: InputBorder.none,
               ),
               maxLines: null,
             ),
