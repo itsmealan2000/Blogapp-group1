@@ -70,7 +70,7 @@ class LoginPage extends StatelessWidget {
                       height: 80,
                       width: 360,
                       decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 10, 238, 207),
+                        color: const Color.fromARGB(255, 10, 238, 207),
                         borderRadius: BorderRadius.circular(15)),
                       child: const Center(
                           child: Text(

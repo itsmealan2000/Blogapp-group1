@@ -26,8 +26,8 @@ class MainApp extends StatelessWidget {
       title: "BLOG APP",
       debugShowCheckedModeBanner: false,
       theme: Provider.of<ThemeProvider>(context).themeData,
-      //home:  const SplashPage()
       home: const AuthPage(),
     );
   }
 }
+

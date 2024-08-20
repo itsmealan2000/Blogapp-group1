@@ -21,7 +21,9 @@ class MyTextfield extends StatelessWidget {
         controller: controller,
         obscureText: obscure,
         decoration: InputDecoration(
+          
           enabledBorder: OutlineInputBorder(
+
             borderRadius: BorderRadius.circular(15),
           ),
           hintText: text,
