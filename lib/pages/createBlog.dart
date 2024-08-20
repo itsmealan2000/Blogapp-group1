@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
+// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:share/share.dart';
@@ -9,7 +9,8 @@ import 'package:share/share.dart';
 import 'package:file_picker/file_picker.dart';
 
 class NewBlogPage extends StatefulWidget {
-  const NewBlogPage({super.key});
+  final void Function()? onTap;
+  const NewBlogPage({super.key,required this.onTap});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -74,11 +75,11 @@ class _NewBlogPageState extends State<NewBlogPage> {
     Share.share('Check out my new blog!');
   }
 
-  void _saveBlog() {
-    if (kDebugMode) {
-      print('Blog saved');
-    }
-  }
+  // void _saveBlog() {
+  //   if (kDebugMode) {
+  //     print('Blog saved');
+  //   }
+  // }
 
   void _removeBottomImage(int index) {
     setState(() {
@@ -97,11 +98,11 @@ class _NewBlogPageState extends State<NewBlogPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('New Blog'),
-        backgroundColor: Colors.purple[300],
+        backgroundColor: Theme.of(context).colorScheme.primary,
       ),
       body: Container(
         decoration: BoxDecoration(
-          color: Colors.purple[100],
+          color: Theme.of(context).colorScheme.surface,
         ),
         constraints: const BoxConstraints.expand(),
         child: SingleChildScrollView(
@@ -118,7 +119,7 @@ class _NewBlogPageState extends State<NewBlogPage> {
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey, width: 2.0),
                       borderRadius: BorderRadius.circular(8.0),
-                      color: Colors.grey[200],
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                     child: _topImage == null
                         ? Center(
@@ -150,11 +151,12 @@ class _NewBlogPageState extends State<NewBlogPage> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                const Text(
+                 Text(
                   'Blog Title',
                   style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.inversePrimary,
                   ),
                 ),
                 const SizedBox(height: 15),
@@ -168,17 +170,18 @@ class _NewBlogPageState extends State<NewBlogPage> {
                     ),
                     hintText: 'Enter your blog title',
                     filled: true,
-                    fillColor: Colors.white,
+                    fillColor: Theme.of(context).colorScheme.primary,
                     contentPadding: const EdgeInsets.symmetric(
                         horizontal: 16.0, vertical: 12.0),
                   ),
                 ),
                 const SizedBox(height: 20),
-                const Text(
+                Text(
                   'Category',
                   style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.inversePrimary,
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -189,7 +192,8 @@ class _NewBlogPageState extends State<NewBlogPage> {
                       color: Colors.grey,
                       width: 2.0,
                     ),
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.primary
+                    ,
                   ),
                   padding: const EdgeInsets.symmetric(
                       horizontal: 12.0, vertical: 4.0),
@@ -211,10 +215,11 @@ class _NewBlogPageState extends State<NewBlogPage> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                const Text(
+                 Text(
                   'Blog Content',
                   style: TextStyle(
                     fontSize: 22,
+                    color: Theme.of(context).colorScheme.inversePrimary,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -227,7 +232,7 @@ class _NewBlogPageState extends State<NewBlogPage> {
                       color: Colors.grey,
                       width: 2.0,
                     ),
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -257,6 +262,7 @@ class _NewBlogPageState extends State<NewBlogPage> {
                       const TextField(
                         maxLines: null,
                         decoration: InputDecoration(
+                          
                           border: InputBorder.none,
                           hintText: 'Write your blog content here...',
                           contentPadding: EdgeInsets.symmetric(
@@ -273,46 +279,49 @@ class _NewBlogPageState extends State<NewBlogPage> {
       ),
       bottomNavigationBar: Container(
         padding: const EdgeInsets.all(10),
-        color: Colors.purple[300],
+        color: Theme.of(context).colorScheme.primary,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             IconButton(
-              icon: const Icon(Icons.share),
+              icon: Icon(Icons.share,color: Theme.of(context).colorScheme.inversePrimary,),
               onPressed: _shareContent,
             ),
             Row(
               children: [
                 IconButton(
-                  icon: const Icon(Icons.camera_alt),
+                  icon: Icon(Icons.camera_alt,color: Theme.of(context).colorScheme.inversePrimary,),
                   onPressed: () {
                     _captureBottomImage(ImageSource.camera);
                   },
                 ),
                 IconButton(
-                  icon: const Icon(Icons.image),
+                  icon:  Icon(Icons.image,color: Theme.of(context).colorScheme.inversePrimary,),
                   onPressed: () {
                     _captureBottomImage(ImageSource.gallery);
                   },
                 ),
                 // ignore: prefer_const_constructors
                 IconButton(
-                  icon: const Icon(Icons.attach_file,color: Colors.black),
+                  icon: Icon(Icons.attach_file,color: Theme.of(context).colorScheme.inversePrimary,),
                   onPressed: _pickFile,
                 ),
               ],
             ),
-            ElevatedButton(
-              onPressed: _saveBlog,
-              style: ElevatedButton.styleFrom(
-                shape: const CircleBorder(),
-                padding: const EdgeInsets.all(20),
-              ),
-              child: const Text(
+            // ElevatedButton(
+            //   onPressed: _saveBlog,
+            //   style: ElevatedButton.styleFrom(
+            //     shape: const CircleBorder(),
+            //     padding: const EdgeInsets.all(20),
+            //   ),
+            GestureDetector(
+              onTap: widget.onTap,
+              child: Text(
                 'Save',
                 style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                  fontSize: 18,
                 ),
               ),
             ),

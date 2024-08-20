@@ -13,7 +13,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final List pages=[
-    const MainPage(),
+     MainPage(),
     const SearchPage(),
     const LikedPage(),
     const SettingPage()

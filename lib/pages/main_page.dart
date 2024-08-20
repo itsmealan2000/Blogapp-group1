@@ -1,20 +1,13 @@
+import 'package:blogapp/components/my_listtile.dart';
 import 'package:flutter/material.dart';
 import 'createBlog.dart'; // Import the new page
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: MainPage(), // Use a separate widget for the main page
-      debugShowCheckedModeBanner: false,
-    );
-  }
-}
-
+// ignore: must_be_immutable
 class MainPage extends StatelessWidget {
-  const MainPage({super.key});
+ MainPage({super.key});
 
+List blog=[];
+  void onSaved(){}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,60 +15,47 @@ class MainPage extends StatelessWidget {
         color: Theme.of(context).colorScheme.surface,
         child: Column(
           children: [
-            Container(
-              child:  Column(
-                children: [
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(top: 50.0), // Adjust padding as needed
-                    child: Text(
-                      'DoYourBlog',
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.inversePrimary,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Times New Roman', // Set the font family
-                      ),
+            Column(
+              children: [
+                Padding(
+                  padding:
+                      const EdgeInsets.only(top: 50.0), // Adjust padding as needed
+                  child: Text(
+                    'DoYourBlog',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Times New Roman', // Set the font family
                     ),
                   ),
-                  const Divider(
-                    color: Colors.black, // Line color
-                    thickness: 2, // Line thickness
-                    indent: 20, // Left indent
-                    endIndent: 20, // Right indent
-                  ),
-                ],
-              ),
+                ),
+                const Divider(
+                  color: Colors.black, // Line color
+                  thickness: 2, // Line thickness
+                  indent: 20, // Left indent
+                  endIndent: 20, // Right indent
+                ),
+                // ListView.builder(
+                //   itemCount: blog.length,
+                //   itemBuilder: (context, index) {
+                //     return MyListtile();
+                //   },
+                //   )
+                MyListtile()
+                
+              ],
             ),
-            // Separate Container for the search box
-            // Container(
-            //   padding:
-            //       const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-            //   child: const SizedBox(
-            //     height: 40.0, // Set the height of the search box
-            //     child: TextField(
-            //       decoration: InputDecoration(
-            //         hintText: 'Search',
-            //         border: OutlineInputBorder(
-            //           borderRadius:
-            //               BorderRadius.all(Radius.circular(30.0)), // Oval shape
-            //         ),
-            //         filled: true,
-            //         fillColor: Colors.white,
-            //         contentPadding: EdgeInsets.symmetric(
-            //             vertical: 10.0,
-            //             horizontal:
-            //                 15.0), // Adjust the padding to control the height
-            //         prefixIcon: Icon(Icons.search),
-            //       ),
-            //     ),
-            //   ),
+            
+            const Spacer(), // To push the Center widget to the middle of the screen
+            // const Center(
+            //   child: Text("Create your new Blog!!"),
             // ),
             const Spacer(), // To push the Center widget to the middle of the screen
-            const Center(
-              child: Text("Create your new Blog!!"),
-            ),
-            const Spacer(), // To push the Center widget to the middle of the screen
+            //  ListView.builder(itemBuilder: (context, index) {
+            //       return MyListtile();
+            //     },)
+            
           ],
         ),
       ),
@@ -84,11 +64,11 @@ class MainPage extends StatelessWidget {
           // Navigate to the NewBlogPage
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const NewBlogPage()),
+            MaterialPageRoute(builder: (context) => NewBlogPage(onTap: onSaved,)),
           );
         },
-        backgroundColor: const Color.fromARGB(255, 190, 10, 70), // Button color
-        foregroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary, // Button color
+        foregroundColor: Theme.of(context).colorScheme.primary,
         child: const Icon(Icons.add), // Icon color
       ),
     );
