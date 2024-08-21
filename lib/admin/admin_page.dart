@@ -51,7 +51,7 @@ class AdminPageState extends State<AdminPage> {
               Icons.logout,
               size: 50,
             ),
-            onPressed: () => _signOut,
+            onPressed: () => _signOut(),
           ),
         ],
         iconTheme: const IconThemeData(size: 30), // Icon size

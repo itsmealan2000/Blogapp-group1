@@ -1,6 +1,8 @@
 import 'package:blogapp/components/my_textfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:blogapp/theme/theme_provider.dart';
+import 'package:provider/provider.dart';
 // import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class RegisterPage extends StatelessWidget {
@@ -31,6 +33,7 @@ class RegisterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
     return SafeArea(
       child: Scaffold(
         //backgroundColor: Theme.of(context).colorScheme.surface,
@@ -38,9 +41,13 @@ class RegisterPage extends StatelessWidget {
         body: Container(
           width: double.infinity,
           height: double.infinity,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('assets/images/blog.png'),
+              image: AssetImage(
+                 themeProvider.isDarkMode
+                        ? 'assets/images/blogdark.png'
+                        : 'assets/images/blog.png',
+              ),
               fit: BoxFit.fill,)
           ),
           child: Center(
@@ -57,13 +64,21 @@ class RegisterPage extends StatelessWidget {
                   const SizedBox(
                     height: 300,
                   ),
-                  const Text(
+                  Text(
                     'Welcome to Blogging App',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: 24, 
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                      ),
                   ),
-                  const Text(
+                  Text(
                     "Post and see the blogs,",
-                    style: TextStyle(fontSize: 20, color: Color.fromARGB(255, 242, 196, 10)),
+                    style: TextStyle(
+                      fontSize: 20, 
+                      // color: Color.fromARGB(255, 242, 196, 10),
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                      ),
                   ),
                   // const Text(
                   //   "Register Now,",
@@ -73,7 +88,10 @@ class RegisterPage extends StatelessWidget {
                     height: 10,
                   ),
                   MyTextfield(
-                    icon: const Icon(Icons.email_rounded),
+                    icon: Icon(
+                      Icons.email_rounded,
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                      ),
                     controller: _emailController,
                     text: "Email",
                     obscure: false,
@@ -82,7 +100,10 @@ class RegisterPage extends StatelessWidget {
                     height: 5,
                   ),
                   MyTextfield(
-                    icon: const Icon(Icons.password_rounded),
+                    icon: Icon(
+                      Icons.password_rounded,
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                      ),
                     text: "Password",
                     obscure: true,
                     controller: _pwController,
@@ -91,7 +112,10 @@ class RegisterPage extends StatelessWidget {
                     height: 5,
                   ),
                   MyTextfield(
-                    icon: const Icon(Icons.password_rounded),
+                    icon: Icon(
+                      Icons.password_rounded,
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                      ),
                     text: "Confirm Password",
                     obscure: true,
                     controller: _confirmPwController,
@@ -120,7 +144,9 @@ class RegisterPage extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text("Already have an account "),
+                      const Text("Already have an account",
+                        
+                      ),
                       GestureDetector(
                           onTap: onTap,
                           child: Text(

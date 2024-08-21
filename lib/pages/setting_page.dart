@@ -1,3 +1,4 @@
+import 'package:blogapp/auth/auth_page.dart';
 import 'package:blogapp/components/profile.dart';
 import 'package:blogapp/theme/theme_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,13 +7,23 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
-class SettingPage extends StatelessWidget {
+class SettingPage extends StatefulWidget {
   const SettingPage({super.key});
 
-  void signOut() async {
-    await FirebaseAuth.instance.signOut();
-  }
+  @override
+  SettingPageState createState() => SettingPageState();
+}
 
+class SettingPageState extends State<SettingPage> {
+  Future<void> _signOut() async {
+    await FirebaseAuth.instance.signOut();
+    if (mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const AuthPage()),
+      );
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,7 +90,7 @@ class SettingPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: GestureDetector(
-                  onTap: signOut,
+                  onTap: _signOut,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
