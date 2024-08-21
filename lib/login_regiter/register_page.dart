@@ -1,7 +1,6 @@
 import 'package:blogapp/components/my_textfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class RegisterPage extends StatelessWidget {
   final void Function()? onTap;
@@ -49,22 +48,18 @@ class RegisterPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    FontAwesomeIcons.blog,
-                    size: 100,
-                    color: Colors.red.shade300,
-                  ),
+                  
                   const SizedBox(
-                    height: 50,
+                    height: 250,
                   ),
                   const Text(
                     'Welcome to Blogging App',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold,color: Colors.white),
                   ),
                   const Text(
                     "Post and see the blogs,",
-                    style: TextStyle(fontSize: 20, color: Color.fromARGB(255, 242, 196, 10)),
-                  ),
+                    style: TextStyle(fontSize: 20, color:Colors.grey,
+                  ),),
                   // const Text(
                   //   "Register Now,",
                   //   style: TextStyle(fontSize: 20, color: Colors.grey),
@@ -120,7 +115,7 @@ class RegisterPage extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text("Already have an account "),
+                      const Text("Already have an account!  ",style: TextStyle(color: Colors.white),),
                       GestureDetector(
                           onTap: onTap,
                           child: Text(

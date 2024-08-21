@@ -18,16 +18,19 @@ class MyTextfield extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left:15.0,right: 15.0),
       child: TextField(
+        style: const TextStyle(color: Colors.white),
+        cursorColor: Colors.white,
         controller: controller,
         obscureText: obscure,
         decoration: InputDecoration(
-          
           enabledBorder: OutlineInputBorder(
-
+      
             borderRadius: BorderRadius.circular(15),
           ),
           hintText: text,
+          hintStyle:const TextStyle(color: Colors.white),
           icon: icon,
+          iconColor: Colors.white
         ),
       ),
     );

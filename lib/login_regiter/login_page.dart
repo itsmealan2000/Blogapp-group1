@@ -1,7 +1,7 @@
 import 'package:blogapp/components/my_textfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+//import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class LoginPage extends StatelessWidget {
   final void Function()? onTap;
@@ -35,20 +35,21 @@ class LoginPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    FontAwesomeIcons.blog,
-                    size: 100,
-                    color: Colors.red.shade300,
-                  ),
-                  const SizedBox(height: 50,),
-                 const Text('Welcome to Blogging App',
-                  style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold),),
+                  // Icon(
+                  //   FontAwesomeIcons.blog,
+                  //   size: 100,
+                  //   color: Colors.red.shade300,
+                  // ),
+                  const SizedBox(height: 200,),
+                  const Text('Welcome to Blogging App',
+                  style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold,color: Colors.white),),
                   const Text("Post and see the blogs",style: TextStyle(fontSize: 20,color: Colors.grey),),
                   
                   const SizedBox(height: 10,),
                   MyTextfield(
                     icon: const Icon(Icons.email_rounded),
                     controller: _emailController,
+                    
                     text: "Email",
                     obscure: false,
                   ),
@@ -83,7 +84,7 @@ class LoginPage extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text("Don't have account? "),
+                      const Text("Don't have account? ",style: TextStyle(color: Colors.white),),
                       GestureDetector(
                         onTap: onTap,
                         child: Text("Register Now",style: TextStyle(color: Colors.blue.shade600,fontWeight: FontWeight.bold),))
