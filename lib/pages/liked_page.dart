@@ -7,6 +7,9 @@ class LikedPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Favorite',style: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),),
+      ),
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: const Center(child: Text("Liked Page")),
     );

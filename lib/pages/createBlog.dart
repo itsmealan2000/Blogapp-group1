@@ -1,328 +1,99 @@
-import 'dart:async';
-import 'dart:io';
-
-// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:share/share.dart';
-// ignore: unused_import
-import 'package:file_picker/file_picker.dart';
+import 'create_page.dart';
 
-class NewBlogPage extends StatefulWidget {
-  final void Function()? onTap;
-  const NewBlogPage({super.key,required this.onTap});
+class CreateBlogPage extends StatefulWidget {
+  final String? initialTitle;
+  final String? initialContent;
+
+  const CreateBlogPage({
+    this.initialTitle,
+    this.initialContent,
+    super.key,
+  });
 
   @override
-  // ignore: library_private_types_in_public_api
-  _NewBlogPageState createState() => _NewBlogPageState();
+  _CreateBlogPageState createState() => _CreateBlogPageState();
 }
 
-class _NewBlogPageState extends State<NewBlogPage> {
-  String? _selectedCategory;
-  final List<String> _categories = [
-    'Food blogs',
-    'Travel blogs',
-    'Health and fitness blogs',
-    'Lifestyle blogs',
-    'Fashion and beauty blogs',
-    'Photography blogs',
-    'Personal blogs',
-    'DIY craft blogs',
-    'Parenting blogs',
-    'Music blogs',
-    'Business blogs',
-    'Art and design blogs',
-    'Book and writing blogs',
-    'Personal finance blogs',
-    'Interior design blogs',
-    'Sports blogs',
-    'News blogs',
-    'Movie blogs',
-    'Religion blogs',
-    'Political blogs',
-  ];
+class _CreateBlogPageState extends State<CreateBlogPage> {
+  late TextEditingController _titleController;
+  late TextEditingController _contentController;
 
-  XFile? _topImage;
-  final List<File> _bottomImages = [];
-  // ignore: unused_field
-  File? _file;
+  @override
+  void initState() {
+    super.initState();
+    _titleController = TextEditingController(text: widget.initialTitle);
+    _contentController = TextEditingController(text: widget.initialContent);
+  }
 
-  get _pickFile => null;
+  void _saveBlog() {
+    final String title = _titleController.text;
+    final String content = _contentController.text;
 
-  Future<void> _pickTopImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      setState(() {
-        _topImage = pickedFile;
-      });
+    if (title.isNotEmpty && content.isNotEmpty) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => CategoryPage(
+            title: title,
+            content: content,
+          ),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please fill in both title and content')),
+      );
     }
-  }
-
-  Future<void> _captureBottomImage(ImageSource source) async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: source);
-
-    if (pickedFile != null) {
-      setState(() {
-        _bottomImages.add(File(pickedFile.path));
-      });
-    }
-  }
-
-  void _shareContent() {
-    Share.share('Check out my new blog!');
-  }
-
-  // void _saveBlog() {
-  //   if (kDebugMode) {
-  //     print('Blog saved');
-  //   }
-  // }
-
-  void _removeBottomImage(int index) {
-    setState(() {
-      _bottomImages.removeAt(index);
-    });
-  }
-
-  void _removeTopImage() {
-    setState(() {
-      _topImage = null;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
-        title: const Text('New Blog'),
         backgroundColor: Theme.of(context).colorScheme.primary,
+        title: Text('Create Blog',style: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),),
       ),
-      body: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
-        ),
-        constraints: const BoxConstraints.expand(),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                GestureDetector(
-                  onTap: _pickTopImage,
-                  child: Container(
-                    width: double.infinity,
-                    height: 150,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey, width: 2.0),
-                      borderRadius: BorderRadius.circular(8.0),
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    child: _topImage == null
-                        ? Center(
-                            child: Icon(
-                              Icons.camera_alt,
-                              color: Colors.grey[600],
-                              size: 40,
-                            ),
-                          )
-                        : Stack(
-                            children: [
-                              Center(
-                                child: Image.file(
-                                  File(_topImage!.path),
-                                  fit: BoxFit.contain,
-                                ),
-                              ),
-                              Positioned(
-                                top: 8,
-                                right: 8,
-                                child: IconButton(
-                                  icon: const Icon(Icons.remove_circle,
-                                      color: Colors.red),
-                                  onPressed: _removeTopImage,
-                                ),
-                              ),
-                            ],
-                          ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                 Text(
-                  'Blog Title',
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.inversePrimary,
-                  ),
-                ),
-                const SizedBox(height: 15),
-                TextField(
-                  style: const TextStyle(
-                    fontSize: 20,
-                  ),
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    hintText: 'Enter your blog title',
-                    filled: true,
-                    fillColor: Theme.of(context).colorScheme.primary,
-                    contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 12.0),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Text(
-                  'Category',
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.inversePrimary,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8.0),
-                    border: Border.all(
-                      color: Colors.grey,
-                      width: 2.0,
-                    ),
-                    color: Theme.of(context).colorScheme.primary
-                    ,
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 12.0, vertical: 4.0),
-                  child: DropdownButton<String>(
-                    value: _selectedCategory,
-                    hint: const Text('Select a category'),
-                    isExpanded: true,
-                    items: _categories.map((String category) {
-                      return DropdownMenuItem<String>(
-                        value: category,
-                        child: Text(category),
-                      );
-                    }).toList(),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        _selectedCategory = newValue;
-                      });
-                    },
-                  ),
-                ),
-                const SizedBox(height: 20),
-                 Text(
-                  'Blog Content',
-                  style: TextStyle(
-                    fontSize: 22,
-                    color: Theme.of(context).colorScheme.inversePrimary,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Container(
-                  padding: const EdgeInsets.all(12.0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8.0),
-                    border: Border.all(
-                      color: Colors.grey,
-                      width: 2.0,
-                    ),
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      for (int i = 0; i < _bottomImages.length; i++)
-                        Stack(
-                          children: [
-                            SizedBox(
-                              width: double.infinity,
-                              child: Image.file(
-                                _bottomImages[i],
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            Positioned(
-                              top: 8,
-                              right: 8,
-                              child: IconButton(
-                                icon: const Icon(Icons.remove_circle,
-                                    color: Colors.red),
-                                onPressed: () => _removeBottomImage(i),
-                              ),
-                            ),
-                          ],
-                        ),
-                      // Add content text field or other widgets here
-                      const TextField(
-                        maxLines: null,
-                        decoration: InputDecoration(
-                          
-                          border: InputBorder.none,
-                          hintText: 'Write your blog content here...',
-                          contentPadding: EdgeInsets.symmetric(
-                              horizontal: 16.0, vertical: 16.0),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(10),
-        color: Theme.of(context).colorScheme.primary,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            IconButton(
-              icon: Icon(Icons.share,color: Theme.of(context).colorScheme.inversePrimary,),
-              onPressed: _shareContent,
+            TextField(
+              controller: _titleController,
+              decoration: const InputDecoration(
+                hintText: 'Title',
+                border: InputBorder.none,
+              ),
+              style: const TextStyle(
+                fontSize: 24.0, // Increase the font size here
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            Row(
-              children: [
-                IconButton(
-                  icon: Icon(Icons.camera_alt,color: Theme.of(context).colorScheme.inversePrimary,),
-                  onPressed: () {
-                    _captureBottomImage(ImageSource.camera);
-                  },
-                ),
-                IconButton(
-                  icon:  Icon(Icons.image,color: Theme.of(context).colorScheme.inversePrimary,),
-                  onPressed: () {
-                    _captureBottomImage(ImageSource.gallery);
-                  },
-                ),
-                // ignore: prefer_const_constructors
-                IconButton(
-                  icon: Icon(Icons.attach_file,color: Theme.of(context).colorScheme.inversePrimary,),
-                  onPressed: _pickFile,
-                ),
-              ],
+            const SizedBox(height: 20.0),
+            TextField(
+              controller: _contentController,
+              decoration: const InputDecoration(
+                hintText: 'Content',
+                border: InputBorder.none,
+              ),
+              maxLines: null,
             ),
-            // ElevatedButton(
-            //   onPressed: _saveBlog,
-            //   style: ElevatedButton.styleFrom(
-            //     shape: const CircleBorder(),
-            //     padding: const EdgeInsets.all(20),
-            //   ),
-            GestureDetector(
-              onTap: widget.onTap,
-              child: Text(
-                'Save',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).colorScheme.inversePrimary,
-                  fontSize: 18,
+            const Spacer(),
+            SizedBox(
+              width: double.infinity,
+              child: TextButton(
+                onPressed: _saveBlog,
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Theme.of(context).colorScheme.secondary,
+                  padding: const EdgeInsets.symmetric(vertical: 15.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
                 ),
+                child:  Text('Next',style: TextStyle(color: Theme.of(context).colorScheme.inversePrimary,fontSize: 18),),
               ),
             ),
           ],

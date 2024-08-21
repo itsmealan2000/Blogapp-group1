@@ -1,4 +1,4 @@
-import 'package:blogapp/components/my_listtile.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'createBlog.dart'; // Import the new page
 
@@ -11,16 +11,9 @@ List blog=[];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        color: Theme.of(context).colorScheme.surface,
-        child: Column(
-          children: [
-            Column(
-              children: [
-                Padding(
-                  padding:
-                      const EdgeInsets.only(top: 50.0), // Adjust padding as needed
-                  child: Text(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        title: Text(
                     'DoYourBlog',
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.inversePrimary,
@@ -29,42 +22,38 @@ List blog=[];
                       fontFamily: 'Times New Roman', // Set the font family
                     ),
                   ),
-                ),
-                const Divider(
-                  color: Colors.black, // Line color
-                  thickness: 2, // Line thickness
-                  indent: 20, // Left indent
-                  endIndent: 20, // Right indent
-                ),
-                // ListView.builder(
-                //   itemCount: blog.length,
-                //   itemBuilder: (context, index) {
-                //     return MyListtile();
-                //   },
-                //   )
-                MyListtile()
-                
-              ],
-            ),
-            
-            const Spacer(), // To push the Center widget to the middle of the screen
-            // const Center(
-            //   child: Text("Create your new Blog!!"),
-            // ),
-            const Spacer(), // To push the Center widget to the middle of the screen
-            //  ListView.builder(itemBuilder: (context, index) {
-            //       return MyListtile();
-            //     },)
-            
-          ],
-        ),
+          centerTitle: true,
       ),
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance.collection("Blogs").snapshots(), 
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.active) {
+            if(snapshot.hasData){
+              return ListView.builder(
+                itemCount: snapshot.data!.docs.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text("${snapshot.data!.docs[index]["title"]}"),
+                    subtitle: Text("${snapshot.data!.docs[index]["content"]}"),
+                  );
+                },
+                );
+            }else if(snapshot.hasError){
+              return Center(child: Text(snapshot.hasError.toString()),);
+            }else{
+              return const Center(child: Text('Blogs Not found'),);
+            }
+          }else{
+            return const Center(child: CircularProgressIndicator(),);
+          }
+        },
+        ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // Navigate to the NewBlogPage
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => NewBlogPage(onTap: onSaved,)),
+            MaterialPageRoute(builder: (context) =>const CreateBlogPage()),
           );
         },
         backgroundColor: Theme.of(context).colorScheme.inversePrimary, // Button color
