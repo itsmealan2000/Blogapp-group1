@@ -8,10 +8,11 @@ import 'package:provider/provider.dart';
 
 class SettingPage extends StatelessWidget {
   const SettingPage({super.key});
-  
-void signOut() async {
-  await FirebaseAuth.instance.signOut();
-}
+
+  void signOut() async {
+    await FirebaseAuth.instance.signOut();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,24 +29,31 @@ void signOut() async {
         body: SafeArea(
           child: Column(
             children: [
-             Padding(
-               padding: const EdgeInsets.all(10.0),
-               child: GestureDetector(
-                  onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) =>const Profile(),));},
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const Profile(),
+                        ));
+                  },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Profile",
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.inversePrimary,
-                          fontSize: 20,
-                          fontStyle: FontStyle.italic),
+                      Text(
+                        "Profile",
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.inversePrimary,
+                            fontSize: 20,
+                            fontStyle: FontStyle.italic),
                       ),
-                     const Icon(FontAwesomeIcons.person)
+                      const Icon(FontAwesomeIcons.person)
                     ],
                   ),
                 ),
-             ),
+              ),
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Row(
@@ -59,9 +67,12 @@ void signOut() async {
                           fontStyle: FontStyle.italic),
                     ),
                     CupertinoSwitch(
-                      value: Provider.of<ThemeProvider>(context,listen: false).isDarkMode, 
-                      onChanged: (value)=> Provider.of<ThemeProvider>(context,listen: false).toggleTheme(),
-                      )
+                      value: Provider.of<ThemeProvider>(context, listen: false)
+                          .isDarkMode,
+                      onChanged: (value) =>
+                          Provider.of<ThemeProvider>(context, listen: false)
+                              .toggleTheme(),
+                    )
                   ],
                 ),
               ),
@@ -72,13 +83,14 @@ void signOut() async {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("LOGOUT",
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.inversePrimary,
-                          fontSize: 20,
-                          fontStyle: FontStyle.italic),
+                      Text(
+                        "LOGOUT",
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.inversePrimary,
+                            fontSize: 20,
+                            fontStyle: FontStyle.italic),
                       ),
-                     const Icon(Icons.logout)
+                      const Icon(Icons.logout)
                     ],
                   ),
                 ),

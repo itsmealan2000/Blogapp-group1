@@ -1,7 +1,7 @@
 import 'package:blogapp/components/my_textfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+// import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class LoginPage extends StatelessWidget {
   final void Function()? onTap;
@@ -35,12 +35,12 @@ class LoginPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    FontAwesomeIcons.blog,
-                    size: 100,
-                    color: Colors.red.shade300,
-                  ),
-                  const SizedBox(height: 50,),
+                  // Icon(
+                  //   FontAwesomeIcons.blog,
+                  //   size: 100,
+                  //   color: Colors.red.shade300,
+                  // ),
+                  const SizedBox(height: 300,),
                  const Text('Welcome to Blogging App',
                   style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold),),
                   const Text("Post and see the blogs",style: TextStyle(fontSize: 20,color: Colors.grey),),
