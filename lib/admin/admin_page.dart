@@ -110,7 +110,7 @@ class AdminPageState extends State<AdminPage> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const Manageblogs()),
+                  MaterialPageRoute(builder: (context) => const ManageBlogs()),
                 );
               },
             ),

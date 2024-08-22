@@ -1,18 +1,68 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Manageblogs extends StatelessWidget {
-  const Manageblogs({super.key});
+class ManageBlogs extends StatefulWidget {
+  const ManageBlogs({super.key});
 
+  @override
+  State<ManageBlogs> createState() => _ManageBlogsState();
+}
+
+class _ManageBlogsState extends State<ManageBlogs> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
-        // leading: IconButton(icon: const Icon(Icons.arrow_back),onPressed: (){ Navigator.pop(context).
-        // },),
+        title: const Text(
+          'Manage Blogs',
+          style: TextStyle(
+            fontSize: 40,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        toolbarHeight: 100,
       ),
-      body: const Center(child: Text('Blogs Manage')),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection("Blogs").snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.active) {
+            if (snapshot.hasData) {
+              var blogDocs = snapshot.data!.docs;
+              if (blogDocs.isEmpty) {
+                return const Center(
+                  child: Text("No blogs available"),
+                );
+              }
 
+              return ListView.builder(
+                itemCount: blogDocs.length,
+                itemBuilder: (context, index) {
+                  var blog = blogDocs[index];
+                  return ListTile(
+                    leading: CircleAvatar(
+                      child: Text("${index + 1}"),
+                    ),
+                    title: Text("${blog['title']}"),
+                    subtitle: Text("${blog['content']}"),
+                  );
+                },
+              );
+            } else if (snapshot.hasError) {
+              return Center(
+                child: Text("Error: ${snapshot.error}"),
+              );
+            } else {
+              return const Center(
+                child: Text("No data found"),
+              );
+            }
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
+      ),
     );
   }
 }
