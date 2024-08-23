@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:blogapp/admin/admin-components/Editblogs.dart'; 
 
 class ManageBlogs extends StatefulWidget {
   const ManageBlogs({super.key});
@@ -41,9 +42,28 @@ class _ManageBlogsState extends State<ManageBlogs> {
                   return ListTile(
                     leading: CircleAvatar(
                       child: Text("${index + 1}"),
+                      backgroundColor: Colors.red,
                     ),
                     title: Text("${blog['title']}"),
+                    titleTextStyle: 
+                      const TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                      ),
                     subtitle: Text("${blog['content']}"),
+                    subtitleTextStyle: 
+                      const TextStyle(
+                        fontSize: 20,
+                      ),
+                    onTap: () {//to editor screen
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => EditBlogs(
+                          docId: blog.id,//pasingid
+                          currentTitle: blog['title'],//passingtitle
+                          currentContent: blog['content'],//passingcontext
+                        ),
+                      ));
+                    },
                   );
                 },
               );

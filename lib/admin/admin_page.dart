@@ -4,6 +4,9 @@ import 'package:blogapp/admin/admin-Pages/manageusers.dart';
 import 'package:blogapp/auth/auth_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
+import 'package:blogapp/theme/theme_provider.dart';
 
 class AdminPage extends StatefulWidget {
   const AdminPage({super.key});
@@ -64,12 +67,33 @@ class AdminPageState extends State<AdminPage> {
               child: Text(
                 "Welcome Admin",
                 style: TextStyle(
-                  color: Colors.black,
                   fontSize: 50,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ),
+            Padding(//theme cahnger switch
+                padding: const EdgeInsets.all(20.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Dark Mode",
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.inversePrimary,
+                          fontSize: 20,
+                          fontStyle: FontStyle.italic),
+                    ),
+                    CupertinoSwitch(
+                      value: Provider.of<ThemeProvider>(context, listen: false)
+                          .isDarkMode,
+                      onChanged: (value) =>
+                          Provider.of<ThemeProvider>(context, listen: false)
+                              .toggleTheme(),
+                    )
+                  ],
+                ),
+              ),
             // List items
             ListTile(
               contentPadding:
@@ -98,7 +122,6 @@ class AdminPageState extends State<AdminPage> {
               title: const Text(
                 "Manage Blogs",
                 style: TextStyle(
-                  color: Colors.black,
                   fontSize: 40,
                   fontWeight: FontWeight.normal,
                 ),
@@ -120,7 +143,6 @@ class AdminPageState extends State<AdminPage> {
               title: const Text(
                 "Manage Content",
                 style: TextStyle(
-                  color: Colors.black,
                   fontSize: 40,
                   fontWeight: FontWeight.normal,
                 ),

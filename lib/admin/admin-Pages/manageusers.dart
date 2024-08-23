@@ -6,10 +6,10 @@ class Manageusers extends StatefulWidget {
   const Manageusers({super.key});
 
   @override
-  _ManageusersState createState() => _ManageusersState();
+  ManageusersState createState() => ManageusersState();
 }
 
-class _ManageusersState extends State<Manageusers> {
+class ManageusersState extends State<Manageusers> {
   late Future<List<Map<String, dynamic>>> _userFuture;
   final Apiservice _apiservice = Apiservice('https://jsonplaceholder.typicode.com/users');
   final TextEditingController _searchController = TextEditingController();
