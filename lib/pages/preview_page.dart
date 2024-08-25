@@ -17,16 +17,12 @@ class PreviewPage extends StatelessWidget {
     super.key,
   });
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  void _saveBlog(BuildContext context) async{
-    final blog = {
-      'title': title,
-      'content': content,
-      'category': category,
-    };
+void _saveBlog(BuildContext context) async {
     if (title.isNotEmpty && content.isNotEmpty) {
       await _firestore.collection('Blogs').add({
         'title': title,
         'content': content,
+        'category': category, 
         'timestamp': FieldValue.serverTimestamp(),
       });
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Content Uploaded Successfully')));

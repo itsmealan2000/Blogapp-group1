@@ -1,6 +1,5 @@
-import 'package:blogapp/components/my_textfield.dart';
 import 'package:flutter/material.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -10,17 +9,98 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  final searchController=TextEditingController();
+  final addController = TextEditingController();
+  List<DocumentSnapshot> searchResults = [];
+
+  @override
+  void initState() {
+    super.initState();
+    addController.addListener(_onSearchChanged);
+  }
+
+  @override
+  void dispose() {
+    addController.removeListener(_onSearchChanged);
+    addController.dispose();
+    super.dispose();
+  }
+
+  void _onSearchChanged() {
+    searchBlogs(addController.text);
+  }
+
+  void searchBlogs(String query) async {
+    if (query.isEmpty) {
+      setState(() {
+        searchResults = [];
+      });
+      return;
+    }
+
+    final lowercaseQuery = query.toLowerCase();
+
+    // Fetch all documents and filter client-side
+    final results = await FirebaseFirestore.instance
+        .collection('Blogs')
+        .get();
+
+    final filteredResults = results.docs.where((doc) {
+      final title = doc['title'].toString().toLowerCase();
+      return title.contains(lowercaseQuery);
+    }).toList();
+
+    setState(() {
+      searchResults = filteredResults;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      body: SafeArea(
-        child: MyTextfield(
-          controller: searchController,
-          icon: const Icon(Icons.search),
-          obscure: false,
-          text: 'Search Here',  
+      appBar: AppBar(
+        title: Text(
+          'Search',
+          style: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: addController,
+              cursorColor: Colors.white,
+              decoration: InputDecoration(
+                hintStyle:
+                    TextStyle(color: Theme.of(context).colorScheme.inversePrimary),
+                hintText: 'Search...',
+                border: const OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                ),
+                filled: true,
+                fillColor: Theme.of(context).colorScheme.primary,
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                prefixIcon: Icon(
+                  Icons.search,
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                ),
+              ),
+            ),
+            const SizedBox(height: 20.0),
+            Expanded(
+              child: ListView.builder(
+                itemCount: searchResults.length,
+                itemBuilder: (context, index) {
+                  final blog = searchResults[index];
+                  return ListTile(
+                    title: Text(blog['title']),
+                    subtitle: Text(blog['content']),
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
